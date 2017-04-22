@@ -2,7 +2,9 @@ const { join } = require('path');
 const { readFileSync } = require('fs');
 const { gzipSync } = require('zlib');
 
-const angularPackages = Object.keys(require('./package.json').dependencies).filter(p => p.indexOf('@angular') === 0);
+const dependencies = require('./package.json').dependencies;
+
+const angularPackages = Object.keys(dependencies).filter(p => p.indexOf('@angular') === 0);
 
 console.log('\nreading minified sub-packages...\n');
 
@@ -12,7 +14,7 @@ const minified = angularPackages.map(package => {
   const path = join('.', 'node_modules', package, 'bundles', `${name}.umd.min.js`);
   const buffer = readFileSync(path);
 
-  console.log(`${package} :: ${buffer.length}`);
+  console.log(`${package} :: ${dependencies[package]} :: ${buffer.length}`);
   return buffer;
 });
 
